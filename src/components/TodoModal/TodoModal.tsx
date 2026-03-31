@@ -24,8 +24,9 @@ export const TodoModal: React.FC<TodoModalProps> = ({
         onClick={onClose}
       />
 
+      {/* Показуємо Loader поки завантажується user */}
       {isLoading ? (
-        <Loader /> // показуємо Loader поки user завантажується
+        <Loader />
       ) : (
         <div className="modal-card">
           <header className="modal-card-head">
