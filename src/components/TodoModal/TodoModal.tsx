@@ -2,6 +2,7 @@ import React from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
+import 'bulma/css/bulma.css';
 
 interface TodoModalProps {
   todo: Todo;
