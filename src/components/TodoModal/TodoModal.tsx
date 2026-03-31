@@ -2,6 +2,7 @@ import React from 'react';
 import { Loader } from '../Loader';
 import { Todo } from '../../types/Todo';
 import { User } from '../../types/User';
+import cn from 'classnames';
 
 interface TodoModalProps {
   todo: Todo;
@@ -24,7 +25,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
     />
 
     {isLoading ? (
-      <Loader data-cy="loader" />
+      <Loader />
     ) : (
       <div className="modal-card">
         <header className="modal-card-head">
@@ -34,6 +35,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
           >
             Todo #{todo.id}
           </div>
+
           <button
             type="button"
             className="delete"
@@ -44,14 +46,18 @@ export const TodoModal: React.FC<TodoModalProps> = ({
 
         <div className="modal-card-body">
           <p className="block" data-cy="modal-title">
-            {todo.title}
+            {todo.title.charAt(0).toUpperCase() + todo.title.slice(1)}
           </p>
+
           <p className="block" data-cy="modal-user">
-            {todo.completed ? (
-              <strong className="has-text-success">Done</strong>
-            ) : (
-              <strong className="has-text-danger">Planned</strong>
-            )}
+            <strong
+              className={cn({
+                'has-text-success': todo.completed,
+                'has-text-danger': !todo.completed,
+              })}
+            >
+              {todo.completed ? 'Done' : 'Planned'}
+            </strong>
             {' by '}
             {user ? (
               <a href={`mailto:${user.email}`}>{user.name}</a>

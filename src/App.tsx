@@ -2,43 +2,12 @@
 import React, { useEffect, useMemo } from 'react';
 import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
-
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoModal } from './components/TodoModal';
 import { Loader } from './components/Loader';
 import { Todo } from './types/Todo';
 import { User } from './types/User';
-
-// Mock todos для тестів (5 елементів)
-const MOCK_TODOS: Todo[] = [
-  { id: 1, userId: 1, title: 'Delectus aut autem', completed: false },
-  {
-    id: 2,
-    userId: 1,
-    title: 'Quis ut nam facilis et officia qui',
-    completed: false,
-  },
-  {
-    id: 3,
-    userId: 2,
-    title: 'Suscipit repellat esse quibusdam voluptatem incidunt',
-    completed: false,
-  },
-  { id: 4, userId: 2, title: 'Et porro tempora', completed: true },
-  {
-    id: 5,
-    userId: 2,
-    title: 'Distinctio vitae autem nihil ut molestias quo',
-    completed: true,
-  },
-];
-
-// Mock users для тестів
-const MOCK_USERS: User[] = [
-  { id: 1, name: 'Leanne Graham', email: 'Sincere@april.biz' },
-  { id: 2, name: 'Ervin Howell', email: 'Shanna@melissa.tv' },
-];
 
 export const App: React.FC = () => {
   const [todos, setTodos] = React.useState<Todo[]>([]);
@@ -51,7 +20,7 @@ export const App: React.FC = () => {
   const [user, setUser] = React.useState<User | null>(null);
   const [isUserLoading, setIsUserLoading] = React.useState(false);
 
-  // Фільтрування todo по статусу і query
+  // Фільтрування todos
   const filteredTodos = useMemo(() => {
     let filtered = todos;
 
@@ -70,28 +39,32 @@ export const App: React.FC = () => {
     return filtered;
   }, [todos, filter, query]);
 
-  // Завантаження todos (мок)
+  // Завантаження todos з API
   useEffect(() => {
     setIsLoading(true);
-    setTimeout(() => {
-      setTodos(MOCK_TODOS);
-      setIsLoading(false);
-    }, 500); // невелика затримка для Loader
+    fetch(
+      'https://mate-academy.github.io/react_dynamic-list-of-todos/api/todos.json',
+    )
+      .then(res => res.json())
+      .then((data: Todo[]) => setTodos(data))
+      .finally(() => setIsLoading(false));
   }, []);
 
-  // Завантаження user для модалки (мок)
+  // Завантаження user при виборі todo
   useEffect(() => {
-    if (selectedTodo) {
-      setIsUserLoading(true);
-      setUser(null);
-      setTimeout(() => {
-        const foundUser =
-          MOCK_USERS.find(u => u.id === selectedTodo.userId) || null;
-
-        setUser(foundUser);
-        setIsUserLoading(false);
-      }, 500);
+    if (!selectedTodo) {
+      return;
     }
+
+    setIsUserLoading(true);
+    setUser(null);
+
+    fetch(
+      `https://mate-academy.github.io/react_dynamic-list-of-todos/api/users/${selectedTodo.userId}.json`,
+    )
+      .then(res => res.json())
+      .then((data: User) => setUser(data))
+      .finally(() => setIsUserLoading(false));
   }, [selectedTodo]);
 
   return (
@@ -115,7 +88,7 @@ export const App: React.FC = () => {
                 <Loader />
               ) : (
                 <TodoList
-                  todos={filteredTodos || []}
+                  todos={filteredTodos}
                   selectedTodo={selectedTodo}
                   onSelectTodo={setSelectedTodo}
                 />
