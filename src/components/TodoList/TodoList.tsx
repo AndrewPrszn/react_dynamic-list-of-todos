@@ -1,6 +1,6 @@
 import React from 'react';
-import { Todo } from '../../types/Todo';
 import cn from 'classnames';
+import { Todo } from '../../types/Todo';
 
 interface TodoListProps {
   todos: Todo[];
@@ -23,9 +23,10 @@ export const TodoList: React.FC<TodoListProps> = ({
           </span>
         </th>
         <th>Title</th>
-        <th></th>
+        <th> </th>
       </tr>
     </thead>
+
     <tbody>
       {todos.map(todo => (
         <tr
@@ -62,11 +63,10 @@ export const TodoList: React.FC<TodoListProps> = ({
             >
               <span className="icon">
                 <i
-                  className={
-                    selectedTodo?.id === todo.id
-                      ? 'far fa-eye-slash'
-                      : 'far fa-eye'
-                  }
+                  className={cn({
+                    'far fa-eye-slash': selectedTodo?.id === todo.id,
+                    'far fa-eye': selectedTodo?.id !== todo.id,
+                  })}
                 />
               </span>
             </button>
