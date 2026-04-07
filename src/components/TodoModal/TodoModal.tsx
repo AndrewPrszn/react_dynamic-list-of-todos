@@ -25,10 +25,11 @@ export const TodoModal: React.FC<TodoModalProps> = ({
         onClick={onClose}
       />
 
-      {/* Показуємо Loader поки завантажується user */}
-      {isLoading ? (
-        <Loader />
-      ) : (
+      {/* Loader завжди рендериться під час isLoading */}
+      {isLoading && <Loader />}
+
+      {/* Контент показуємо лише коли user завантажений */}
+      {!isLoading && user && (
         <div className="modal-card">
           <header className="modal-card-head">
             <div
@@ -37,7 +38,6 @@ export const TodoModal: React.FC<TodoModalProps> = ({
             >
               Todo #{todo.id}
             </div>
-
             <button
               type="button"
               className="delete"

@@ -56,8 +56,8 @@ export const App: React.FC = () => {
       return;
     }
 
-    // setIsUserLoading(true);
-    // setUser(null);
+    setIsUserLoading(true);
+    setUser(null);
 
     fetch(
       `https://mate-academy.github.io/react_dynamic-list-of-todos/api/users/${selectedTodo.userId}.json`,
@@ -91,9 +91,9 @@ export const App: React.FC = () => {
                   todos={filteredTodos}
                   selectedTodo={selectedTodo}
                   onSelectTodo={todo => {
-                    setSelectedTodo(todo); // вибираємо todo
                     setUser(null); // очищаємо попереднього користувача
-                    setIsUserLoading(true); // одразу показуємо Loader
+                    setIsUserLoading(true);
+                    setSelectedTodo(todo); // вибираємо todo
                   }}
                 />
               )}
